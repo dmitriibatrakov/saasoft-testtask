@@ -1,11 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SSIconPack from './components/ui/icons/SSIconPack.vue';
+import FormPage from './pages/FormPage.vue';
+
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+
+  <div class="page-container">
+    <SSIconPack />
+    <FormPage />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+  .page-container {
+    margin: 0 auto;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+</style>
