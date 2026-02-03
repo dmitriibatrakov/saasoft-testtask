@@ -15,6 +15,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "naive-ui": "^2.43.2",
     "pinia": "^3.0.4",
     "vue": "^3.5.27"
   },
@@ -29,7 +30,6 @@
     "eslint-plugin-oxlint": "~1.42.0",
     "eslint-plugin-vue": "~10.7.0",
     "jiti": "^2.6.1",
-    "naive-ui": "^2.43.2",
     "npm-run-all2": "^8.0.4",
     "oxlint": "~1.42.0",
     "prettier": "3.8.1",

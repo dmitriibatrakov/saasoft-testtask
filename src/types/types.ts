@@ -1,12 +1,20 @@
 export interface AccountTypeType {
-  id: number;
+  value: number;
   label: 'LDAP' | 'Локальная'
 };
 
 export interface DataType {
       id: number,
-      tag: string[],
-      type: 1 | 2,
+      tag: {text : string}[],
+      type: number,
       login: string,
-      password: string,
+      password: string | null,
+};
+
+export interface RenderedDataType {
+      id: number,
+      tag: string,
+      type: number,
+      login: string,
+      password: string | null,
 };

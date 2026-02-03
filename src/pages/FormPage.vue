@@ -2,13 +2,15 @@
 import DataTable from '@/components/dataTable/DataTable.vue';
 import SSIconSprite from '@/components/ui/icons/SSIconSprite.vue';
 import SSButton from '@/components/ui/SSButton.vue';
+import { useDataStore } from '@/stores/data.store';
+const dataStore = useDataStore();
 
 </script>
 
 <template>
   <div class="header">
       <h1>Учетные записи</h1>
-      <SSButton><SSIconSprite name="plus" size="1rem"/></SSButton>
+      <SSButton @click="dataStore.addNewRow"><SSIconSprite name="plus" size="1rem"/></SSButton>
   </div>
   <section class="main">
     <div class="main__description">

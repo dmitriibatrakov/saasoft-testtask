@@ -1,47 +1,67 @@
-import type { AccountTypeType, DataType } from '@/types/types'
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import type { AccountTypeType, DataType } from '@/types/types';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 export const useDataStore = defineStore('fakeData', () => {
   const data = ref<DataType[]>([
     {
       id: 1,
-      tag: ['xxx', 'yyyy', 'kkkkkkkk', 'MMMMMM'],
+      tag: [{ text: 'xxx' }, { text: 'yyyy' }, { text: 'kkkkkkkk' }, { text: 'MMMMMM' }],
       type: 1,
       login: 'so22meLogin',
-      password: 'som4ePass',
+      password: null,
     },
     {
       id: 2,
-      tag: ['xxx', 'yyyy', 'kkkkkkkk', 'MMMMMM'],
+      tag: [{ text: 'xxx' }, { text: 'yyyy' }, { text: 'kkkkkkkk' }, { text: 'MMMMMM' }],
       type: 2,
       login: 'so666meLogin',
       password: 'som2ePass',
     },
     {
       id: 3,
-      tag: ['xxx', 'yyy3224y', 'kkkkkkkk', 'MMMMMM'],
+      tag: [{ text: 'xxx' }, { text: 'yyy3224y' }, { text: 'kkkkkkkk' }, { text: 'MMMMMM' }],
       type: 1,
       login: 'som111eLogin',
-      password: 'som3ePass',
+      password: null,
     },
-        {
+    {
       id: 4,
-      tag: ['xxx', 'yy123y', 'kkkkkkkk', 'MMMMMM'],
+      tag: [{ text: 'xxx' }, { text: 'yy123y' }, { text: 'kkkkkkkk' }, { text: 'MMMMMM' }],
       type: 2,
       login: 'som5555eLogin',
       password: 'so5mePass',
     },
   ]);
 
-  const accountType = ref<AccountTypeType[]>([
-    {
-      id: 1, label: 'LDAP',
-    },
-    {
-     id: 2, label: 'Локальная',
-    },
-  ])
+  const renderData = computed(() => {
+    return data.value.map((item) => {
+      return { ...item, tag: item.tag.map(t => t.text).join('; ')};
+    });
+  });
 
-  return { data, accountType }
-})
+  function addNewRow() {
+    const newId: number = 1 + Math.max(...data.value.map((row) => row.id));
+
+    data.value.push({
+      id: newId,
+      tag: [],
+      type: 1,
+      login: '',
+      password: '',
+    });
+  }
+
+  const accountEntries = ref<AccountTypeType[]>([
+    {
+      value: 1,
+      label: 'LDAP',
+    },
+    {
+      value: 2,
+      label: 'Локальная',
+    },
+  ]);
+
+  return { data, renderData, accountEntries, addNewRow };
+});
