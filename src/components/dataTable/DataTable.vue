@@ -16,7 +16,10 @@ const columns = ref([
         value: row.tag,
         maxlength: 50,
         showCount: true,
-        status: 'warning'
+        status: row.tag.length === 50 ? 'warning' : undefined,
+        onUpdateValue: (value: string) => {
+          updateData(row.id, 'tag', value.split(';').map(arrEl => ({text: arrEl.trim()})))
+        }
       })
     }
   },
@@ -44,7 +47,7 @@ const columns = ref([
         showCount: true,
         status: row.login.length === 100 ? 'warning' : undefined,
         onUpdateValue: (value: string) => {
-          updateData(row.id, 'login', value); //Продолжить отсюда
+          updateData(row.id, 'login', value);
         }
       })
     }
@@ -62,7 +65,10 @@ const columns = ref([
         value: row.password,
         maxlength: 100,
         showCount: true,
-        status: 'warning'
+        status: row.password && row.password.length === 100 ? 'warning' : undefined,
+        onUpdateValue: (value: string) => {
+          updateData(row.id, 'password', value);
+        }
       })
     }
   },
@@ -87,12 +93,13 @@ const columns = ref([
     console.log('deleted', id);
   }
 
-  function updateData(id: number, key: string, value: string | number) {
+  function updateData(id: number, key: string, value: {text : string}[] | string | number) {
     dataStore.data = dataStore.data.map(item => {
       if(item.id === id) {
-        if (key === "type") {
-          return {...item, type: Number(value)}
+        if (key === 'type' && value === 1) {
+          return {...item, [key]: value, password: null}
         }
+        return {...item, [key]: value}
       }
       return item;
     });
