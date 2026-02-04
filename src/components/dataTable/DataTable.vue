@@ -8,6 +8,7 @@ import { useDataTable } from './useDataTable';
 const dataStore = useDataStore();
 const dataTable = useDataTable();
 
+
 const columns = ref([
   {
     title: 'Метка',
@@ -26,6 +27,9 @@ const columns = ref([
             value.split(';').map((arrEl) => ({ text: arrEl.trim() })),
           );
         },
+        onBlur: () => {
+          dataTable.validationInfo(row.tag, 'Метка');
+        }
       });
     },
   },
@@ -56,6 +60,9 @@ const columns = ref([
         onUpdateValue: (value: string) => {
           dataTable.updateData(row.id, 'login', value.trim());
         },
+        onBlur: () => {
+          dataTable.validationInfo(row.login, 'Логин');
+        }
       });
     },
   },
@@ -77,6 +84,9 @@ const columns = ref([
         onUpdateValue: (value: string) => {
           dataTable.updateData(row.id, 'password', value.trim());
         },
+        onBlur: () => {
+          dataTable.validationInfo(row.password, 'Пароль');
+        }
       });
     },
   },

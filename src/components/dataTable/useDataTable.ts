@@ -33,7 +33,7 @@ export function useDataTable() {
   }
 
   /**
-   * Валидирует заполненное поле и информирует пользователя
+   * Присваивает статус полю ввода и информирует пользователя
    * @param value - значение проверяемого поля
    * @param title - отображаемое название поля
    * @param maxlength - максимально допустимая длина значения
@@ -46,16 +46,17 @@ export function useDataTable() {
   ): 'error' | 'warning' | undefined {
     if (title !== 'Метка') {
       if (value === null || value === '') {
-        
-        message.error(`Поле ${title} должно быть заполнено`);
         return 'error';
       }
     } else if (title === 'Метка' && value) {
-      value
+      const hasEmptyTag = value
         .split(';')
-        .forEach(
-          (el) => el === '' && message.error('Введенный тег имеет нулевую длину') && 'error',
+        .some(
+          (el) => el === '' && 'error',
         );
+        if (hasEmptyTag) {
+          return 'error';
+        }
     }
     if (value && value.length === maxlength) {
       message.warning(`Переполнение поля ${title}`);
@@ -64,6 +65,23 @@ export function useDataTable() {
 
     return undefined;
   }
+  /**
+   * Валидирует поля ввода.
+   * @param value - значение проверяемого поля
+   * @param title - отображаемое название поля
+   */
+  function validationInfo(value: string | null, title: string) {
+    if (value === null || value === '') {
+      message.error(`Поле ${title} должно быть заполнено`);
+    }
+    if (title === 'Метка' && value) {
+      value
+        .split(';')
+        .forEach(
+          (el) => el === '' && message.error('Введенный тег имеет нулевую длину'),
+        );
+    }
+  }
 
-  return { deleteCurrentData, updateData, statusInfo };
+  return { deleteCurrentData, updateData, statusInfo, validationInfo };
 }
