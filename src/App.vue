@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NMessageProvider } from 'naive-ui';
 import SSIconPack from './components/ui/icons/SSIconPack.vue';
 import FormPage from './pages/FormPage.vue';
 
@@ -7,8 +8,10 @@ import FormPage from './pages/FormPage.vue';
 <template>
 
   <div class="page-container">
-    <SSIconPack />
-    <FormPage />
+    <NMessageProvider>
+      <SSIconPack />
+      <FormPage />
+    </NMessageProvider>
   </div>
 </template>
 

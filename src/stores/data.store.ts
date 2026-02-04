@@ -36,7 +36,7 @@ export const useDataStore = defineStore('fakeData', () => {
 
   const renderData = computed(() => {
     return data.value.map((item) => {
-      return { ...item, tag: item.tag.map(t => t.text).join('; ')};
+      return { ...item, tag: item.tag.map(t => t.text).join(';')};
     });
   });
 

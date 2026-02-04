@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useDataStore } from '@/stores/data.store';
 import type { RenderedDataType } from '@/types/types';
-import { NDataTable, NInput, NSelect } from 'naive-ui';
+import { NDataTable, NInput, NSelect, useMessage } from 'naive-ui';
 import { h, ref } from 'vue';
 import SSIconSprite from '../ui/icons/SSIconSprite.vue';
 const dataStore = useDataStore();
+
+const message = useMessage();
 
 const columns = ref([
   {
@@ -16,7 +18,7 @@ const columns = ref([
         value: row.tag,
         maxlength: 50,
         showCount: true,
-        status: row.tag.length === 50 ? 'warning' : undefined,
+        status: statusInfo(row.tag, 'Метка', 50),
         onUpdateValue: (value: string) => {
           updateData(row.id, 'tag', value.split(';').map(arrEl => ({text: arrEl.trim()})))
         }
@@ -45,10 +47,11 @@ const columns = ref([
         value: row.login,
         maxlength: 100,
         showCount: true,
-        status: row.login.length === 100 ? 'warning' : undefined,
+        placeholder: "Ввести данные",
+        status: statusInfo(row.login, 'Логин', 100),
         onUpdateValue: (value: string) => {
           updateData(row.id, 'login', value);
-        }
+        },
       })
     }
   },
@@ -65,7 +68,8 @@ const columns = ref([
         value: row.password,
         maxlength: 100,
         showCount: true,
-        status: row.password && row.password.length === 100 ? 'warning' : undefined,
+        placeholder: "Ввести данные",
+        status: statusInfo(row.password, 'Пароль', 100),
         onUpdateValue: (value: string) => {
           updateData(row.id, 'password', value);
         }
@@ -79,7 +83,6 @@ const columns = ref([
       return h(SSIconSprite, {
         name: 'delete',
         size: '1rem',
-
         onClick: () => {
           deleteCurrentData(row.id);
         }
@@ -104,9 +107,25 @@ const columns = ref([
       return item;
     });
   }
+
+
+  function statusInfo(value: null | string, title: string, maxlength: number) {
+    if (title !== 'Метка') {
+      if (value === null || value === '') {
+        message.error(`Поле ${title} должно быть заполнено`)
+        return 'error'
+      }
+    } else if (title === 'Метка' && value) {
+      value.split(';').forEach(el => el==='' && message.error('Введенный тег имеет нулевую длину') && 'error')
+    }
+    if (value && value.length === maxlength) {
+      message.warning(`Переполнение поля ${title}`)
+      return 'warning'
+    }
+  }
 </script>
 
 <template>
-  <NDataTable :columns="columns" :data="dataStore.renderData" />
-  {{ dataStore.data }}
+    <NDataTable :columns="columns" :data="dataStore.renderData" />
+    {{ dataStore.data }}
 </template>
