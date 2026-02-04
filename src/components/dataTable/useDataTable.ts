@@ -46,6 +46,7 @@ export function useDataTable() {
   ): 'error' | 'warning' | undefined {
     if (title !== 'Метка') {
       if (value === null || value === '') {
+        
         message.error(`Поле ${title} должно быть заполнено`);
         return 'error';
       }

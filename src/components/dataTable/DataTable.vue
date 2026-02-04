@@ -54,7 +54,7 @@ const columns = ref([
         placeholder: 'Ввести данные',
         status: dataTable.statusInfo(row.login, 'Логин', 100),
         onUpdateValue: (value: string) => {
-          dataTable.updateData(row.id, 'login', value);
+          dataTable.updateData(row.id, 'login', value.trim());
         },
       });
     },
@@ -75,7 +75,7 @@ const columns = ref([
         placeholder: 'Ввести данные',
         status: dataTable.statusInfo(row.password, 'Пароль', 100),
         onUpdateValue: (value: string) => {
-          dataTable.updateData(row.id, 'password', value);
+          dataTable.updateData(row.id, 'password', value.trim());
         },
       });
     },
