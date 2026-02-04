@@ -20,7 +20,10 @@ export const useDataStore = defineStore('fakeData', () => {
    * Добавление новой пустой записи в стор
    */
   function addNewRow() {
-    const newId: number = 1 + Math.max(...data.value.map((row) => row.id));
+    const newId: number = data.value.length > 0
+    ? 1 + Math.max(...data.value.map((row) => row.id))
+    : 1
+
     data.value.push({
       id: newId,
       tag: [],

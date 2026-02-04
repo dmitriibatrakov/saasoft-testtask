@@ -71,8 +71,10 @@ export function useDataTable() {
    * @param title - отображаемое название поля
    */
   function validationInfo(value: string | null, title: string) {
-    if (value === null || value === '') {
-      message.error(`Поле ${title} должно быть заполнено`);
+    if (title !== 'Метка') {
+      if (value === null || value === '') {
+        message.error(`Поле ${title} должно быть заполнено`);
+      }
     }
     if (title === 'Метка' && value) {
       value
