@@ -16,15 +16,17 @@ export const useDataStore = defineStore('fakeData', () => {
     });
   });
 
+  /**
+   * Добавление новой пустой записи в стор
+   */
   function addNewRow() {
     const newId: number = 1 + Math.max(...data.value.map((row) => row.id));
-
     data.value.push({
       id: newId,
       tag: [],
       type: 1,
       login: '',
-      password: '',
+      password: null,
     });
   }
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useDataStore } from '@/stores/data.store';
 import type { RenderedDataType } from '@/types/types';
-import { NDataTable, NInput, NSelect, useMessage } from 'naive-ui';
+import { NDataTable, NInput, NSelect } from 'naive-ui';
 import { h, ref } from 'vue';
 import SSIconSprite from '../ui/icons/SSIconSprite.vue';
+import { useDataTable } from './useDataTable';
 const dataStore = useDataStore();
-
-const message = useMessage();
+const dataTable = useDataTable();
 
 const columns = ref([
   {
@@ -18,12 +18,16 @@ const columns = ref([
         value: row.tag,
         maxlength: 50,
         showCount: true,
-        status: statusInfo(row.tag, 'Метка', 50),
+        status: dataTable.statusInfo(row.tag, 'Метка', 50),
         onUpdateValue: (value: string) => {
-          updateData(row.id, 'tag', value.split(';').map(arrEl => ({text: arrEl.trim()})))
-        }
-      })
-    }
+          dataTable.updateData(
+            row.id,
+            'tag',
+            value.split(';').map((arrEl) => ({ text: arrEl.trim() })),
+          );
+        },
+      });
+    },
   },
   {
     title: 'Тип записи',
@@ -33,10 +37,10 @@ const columns = ref([
         value: row.type,
         options: dataStore.accountEntries,
         onUpdateValue: (value: number) => {
-          updateData(row.id, 'type', value);
-        }
-      })
-    }
+          dataTable.updateData(row.id, 'type', value);
+        },
+      });
+    },
   },
   {
     title: 'Логин',
@@ -47,20 +51,20 @@ const columns = ref([
         value: row.login,
         maxlength: 100,
         showCount: true,
-        placeholder: "Ввести данные",
-        status: statusInfo(row.login, 'Логин', 100),
+        placeholder: 'Ввести данные',
+        status: dataTable.statusInfo(row.login, 'Логин', 100),
         onUpdateValue: (value: string) => {
-          updateData(row.id, 'login', value);
+          dataTable.updateData(row.id, 'login', value);
         },
-      })
-    }
+      });
+    },
   },
   {
     title: 'Пароль',
     key: 'password',
     render: (row: RenderedDataType) => {
       if (row.type === 1) {
-        return
+        return;
       }
       return h(NInput, {
         type: 'password',
@@ -68,13 +72,13 @@ const columns = ref([
         value: row.password,
         maxlength: 100,
         showCount: true,
-        placeholder: "Ввести данные",
-        status: statusInfo(row.password, 'Пароль', 100),
+        placeholder: 'Ввести данные',
+        status: dataTable.statusInfo(row.password, 'Пароль', 100),
         onUpdateValue: (value: string) => {
-          updateData(row.id, 'password', value);
-        }
-      })
-    }
+          dataTable.updateData(row.id, 'password', value);
+        },
+      });
+    },
   },
   {
     title: 'Удалить строку',
@@ -84,48 +88,14 @@ const columns = ref([
         name: 'delete',
         size: '1rem',
         onClick: () => {
-          deleteCurrentData(row.id);
-        }
-      })
-    }
-  }
+          dataTable.deleteCurrentData(row.id);
+        },
+      });
+    },
+  },
 ]);
-
-  function deleteCurrentData(id: number) {
-    dataStore.data = dataStore.data.filter((item) => item.id != id);
-    console.log('deleted', id);
-  }
-
-  function updateData(id: number, key: string, value: {text : string}[] | string | number) {
-    dataStore.data = dataStore.data.map(item => {
-      if(item.id === id) {
-        if (key === 'type' && value === 1) {
-          return {...item, [key]: value, password: null}
-        }
-        return {...item, [key]: value}
-      }
-      return item;
-    });
-  }
-
-
-  function statusInfo(value: null | string, title: string, maxlength: number) {
-    if (title !== 'Метка') {
-      if (value === null || value === '') {
-        message.error(`Поле ${title} должно быть заполнено`)
-        return 'error'
-      }
-    } else if (title === 'Метка' && value) {
-      value.split(';').forEach(el => el==='' && message.error('Введенный тег имеет нулевую длину') && 'error')
-    }
-    if (value && value.length === maxlength) {
-      message.warning(`Переполнение поля ${title}`)
-      return 'warning'
-    }
-  }
 </script>
 
 <template>
-    <NDataTable :columns="columns" :data="dataStore.renderData" />
-    {{ dataStore.data }}
+  <NDataTable :columns="columns" :data="dataStore.renderData" />
 </template>
